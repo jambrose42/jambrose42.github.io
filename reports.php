@@ -10,7 +10,7 @@
 
   function getGraph($db) {
 
-    $query = 'SELECT * from player';
+    $query = 'SELECT * from player where number != 8';
 
     $stmt = $db->prepare($query);
     $stmt->execute(array());
@@ -33,7 +33,7 @@
     }
 
     $query = 'SELECT scoredBy, assist, count(*) as count from assists
-    group by scoredBy, assist';
+     where scoredBy != 8 and assist != 8 group by scoredBy, assist';
 
     $stmt = $db->prepare($query);
     $stmt->execute(array());
@@ -45,7 +45,7 @@
 
       $graph['links'][$i]['source'] = $players[$item['assist']];
       $graph['links'][$i]['target'] = $players[$item['scoredBy']];
-      $graph['links'][$i]['value'] = intval($item['count'])*5;
+      $graph['links'][$i]['value'] = intval($item['count']);
 
       $i++;
 
