@@ -10,7 +10,7 @@
 
   function getGraph($db) {
 
-    $query = 'SELECT * from player where number != 8';
+    $query = 'SELECT * from player';
 
     $stmt = $db->prepare($query);
     $stmt->execute(array());
@@ -33,7 +33,7 @@
     }
 
     $query = 'SELECT scoredBy, assist, count(*) as count from assists
-     where scoredBy != 8 and assist != 8 group by scoredBy, assist';
+     group by scoredBy, assist';
 
     $stmt = $db->prepare($query);
     $stmt->execute(array());
