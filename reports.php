@@ -45,7 +45,7 @@
 
       $graph['links'][$i]['source'] = $players[$item['assist']];
       $graph['links'][$i]['target'] = $players[$item['scoredBy']];
-      $graph['links'][$i]['value'] = intval($item['count']);
+      $graph['links'][$i]['value'] = intval($item['count']**3);
 
       $i++;
 
