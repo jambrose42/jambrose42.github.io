@@ -32,8 +32,7 @@
       $i++;
     }
 
-    $query = 'SELECT scoredBy, assist, count(*) as count from assists
-     group by scoredBy, assist';
+    $query = 'SELECT player1, player2 from assists';
 
     $stmt = $db->prepare($query);
     $stmt->execute(array());
@@ -41,11 +40,65 @@
 
     $i = 0;
 
+    // Normalize couples so that first is always greater
+
+    $couples = [];
+
     foreach ($results as $item) {
 
-      $graph['links'][$i]['source'] = $players[$item['assist']];
-      $graph['links'][$i]['target'] = $players[$item['scoredBy']];
-      $graph['links'][$i]['value'] = intval($item['count']**3);
+      if ($item['player2'] > $item['player1']) {
+
+        $couples[$i]['player1'] = $item['player2'];
+        $couples[$i]['player2'] = $item['player1'];
+
+      } else {
+
+        $couples[$i]['player1'] = $item['player1'];
+        $couples[$i]['player2'] = $item['player2'];
+
+      }
+
+      $i++;
+
+    }
+
+    // Create a new array of counts of each couple
+
+    $counts = [];
+
+    $i = 0;
+    $count= 0;
+
+    foreach ($couples as $couple) {
+
+      $count = 0;
+
+      $counts[$i]['player1'] = $couple['player1'];
+      $counts[$i]['player2'] = $couple['player2'];
+
+      foreach($couples as $couple2) {
+
+        if ($couple2['player1'] == $couple['player1'] && $couple2['player2'] == $couple['player2']) {
+
+          $count++;
+
+        }
+
+      }
+
+      $counts[$i]['count'] = $count;
+
+      $i++;
+
+    }
+
+    $i = 0;
+
+    foreach ($counts as $item) {
+
+      $graph['links'][$i]['source'] = $players[$item['player1']];
+      $graph['links'][$i]['target'] = $players[$item['player2']];
+      $graph['links'][$i]['value'] = intval($item['count']**2);
 
       $i++;
 
