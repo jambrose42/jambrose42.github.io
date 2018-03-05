@@ -92,6 +92,10 @@
 
     }
 
+    // Remove duplicate couples
+
+    $counts = array_unique($counts, SORT_REGULAR);
+
     $i = 0;
 
     foreach ($counts as $item) {
@@ -103,6 +107,7 @@
       $i++;
 
     }
+
 
     echo json_encode($graph);
 
